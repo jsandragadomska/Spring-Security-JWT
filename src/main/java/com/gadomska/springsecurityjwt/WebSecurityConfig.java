@@ -30,6 +30,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/test2").authenticated()
                 .antMatchers("/test3").hasRole("ADMIN")
                 .and()
-                .formLogin().permitAll();
+                .addFilter(new JwtFilter(authenticationManager()));
     }
 }
