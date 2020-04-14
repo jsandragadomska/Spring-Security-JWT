@@ -14,7 +14,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Set;
 
@@ -24,20 +23,19 @@ public class JwtFilter extends BasicAuthenticationFilter {
         super(authenticationManager);
     }
 
-    @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException, ServletException {
-
         String header = request.getHeader("Authorization");
 
-        UsernamePasswordAuthenticationToken authResult = getAuthorizationByToken(header);
+        UsernamePasswordAuthenticationToken authResult = getAuthenticationByToken(header);
 
         SecurityContextHolder.getContext().setAuthentication(authResult);
 
+        chain.doFilter(request, response);
     }
 
-    private UsernamePasswordAuthenticationToken getAuthorizationByToken(String header){
-        Jws<Claims> claimsJws = (Jws<Claims>) Jwts.parser()
-                .setSigningKey("yA<OCQ%Nf{<*6}E".getBytes())
+    private UsernamePasswordAuthenticationToken getAuthenticationByToken(String header) {
+
+        Jws<Claims> claimsJws = Jwts.parser().setSigningKey("aaa" .getBytes())
                 .parseClaimsJws(header.replace("Bearer ", ""));
 
         String username = claimsJws.getBody().get("name").toString();
